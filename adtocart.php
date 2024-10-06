@@ -1,7 +1,7 @@
 <?php 
 include_once('inc_db.php');
 $id = $_GET['id'];
-$sql = "inesrt into"
+$sql = "INSERT INTO `cart`(`id`, `name`, `description`, `code`) VALUES ('[value-1]','[value-2]','[value-3]','[value-4]')";
 
  ?>
  <!DOCTYPE html>
