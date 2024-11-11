@@ -1,38 +1,40 @@
 <?php 
-include_once '../inc_db.php'; 
-echo "<br>";
-if (isset($_POST['submit'])) {
-	echo $name = $_POST['name'];
-	echo $description = $_POST['description'];
-	echo $price = $_POST['price'];
-	echo $discount = $_POST['Discount'];
-	echo $file = $_FILES['image'];
-    echo $fileName = "images/".$file['name'];
-    echo $fileTmpName = $file['tmp_name'];
-    echo $fileSize = $file['size'];
-    echo $fileError = $file['error'];
-    echo $fileType = $file['type'];
-    echo "<br>";
-   $redirect = $_POST['flexRadioDefault'];
-   if ($redirect==="slide") {
-   	$sql = "INSERT INTO `slid`(`name`, `description`, `image`, `price`, `discount`) VALUES ('$name','$description','$fileName','$price','$discount')";
-   	$query = mysqli_query($db,$sql);
-   	if ($query) {
-   		echo "slid Product successfully uploaded <a href='admin_log.php'>Go back</a>";
-   	}
-   }elseif ($redirect==="body") {
-   	$sql = "INSERT INTO `body_product`(`name`, `description`, `image`, `price`, `discount`) VALUES ('$name','$description','$fileName','$price','$discount')";
-   	$query = mysqli_query($db,$sql);
-   	if ($query) {
-   		echo "Body Product successfully uploaded <a href='admin_log.php'>Go back</a>";
-   	}
-   }elseif($redirect==="owl"){
-   	$sql = "INSERT INTO `owlCarousel`(`name`, `description`, `image`, `price`, `discount`) VALUES ('$name','$description','$fileName','$price','$discount')";
-   	$query = mysqli_query($db,$sql);
-   	if ($query) {
-   		echo "multi-slid Product successfully uploaded <a href='admin_log.php'>Go back</a>";
-   	}
-   }
-}
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
- ?>
+include_once '../inc_db.php'; 
+
+if (isset($_POST['submit'])) {
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+    $price = $_POST['price'];
+    $discount = $_POST['Discount'];
+    $fileTmpName = $_FILES['image']['tmp_name'];
+    $fileName = "images/" . basename($_FILES['image']['name']);
+
+    if (move_uploaded_file($fileTmpName, $fileName)) {
+        $redirect = $_POST['flexRadioDefault'];
+        $table = '';
+
+        if ($redirect === "slide") {
+            $table = 'slid';
+        } elseif ($redirect === "body") {
+            $table = 'body_product';
+        } elseif ($redirect === "owl") {
+            $table = 'owlCarousel';
+        }
+
+        $stmt = $db->prepare("INSERT INTO `$table` (`name`, `description`, `image`, `price`, `discount`) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $name, $description, $fileName, $price, $discount);
+        if ($stmt->execute()) {
+            echo "Product successfully uploaded<a href='admin_log.php'>Back</a>";
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+    } else {
+        echo "Error moving the uploaded file.";
+    }
+} else {
+    echo "Please <a href='admin.php'>Login</a> first.";
+}
+?>
