@@ -1,7 +1,8 @@
 <?php 
-include_once('inc_db.php');
-$id = $_GET['id'];
-$sql = "INSERT INTO `cart`(`id`, `name`, `description`, `code`) VALUES ('[value-1]','[value-2]','[value-3]','[value-4]')";
+include_once('inc_db.php'); 
+session_start();
+ error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
  ?>
  <!DOCTYPE html>
@@ -47,8 +48,24 @@ $sql = "INSERT INTO `cart`(`id`, `name`, `description`, `code`) VALUES ('[value-
         </a>
     </div>
 </nav>
+<br><br><br><br><br><br>
+<?php 
+ $name = $_GET['name'];
+ $description = $_GET['description'];
+$image = $_SESSION['image'];
+$price = $_GET['price'];
+$discount = $_GET['discount'];
+$username = $_GET['Uname'];
+$userid = $_GET['UID'];
+$sql = "INSERT INTO `cart`(`name`, `description`, `img`, `price`, `discount`, `userName`, `UserID`) VALUES ('$name','$description','$image','$price','$discount','$username','$userid')";
+$query = mysqli_query($db,$sql);
+if ($query) {
+    echo "<span style='margin-top:90px'>Add to cart successfully.<a href='index.php'>Back</a></span>";
+}else{
+    echo "fail to add to cart." . mysqli_error($db);
+}
 
-
+?>
 
 <!-- this is bootstrap slider -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

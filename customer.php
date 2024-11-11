@@ -1,3 +1,6 @@
+<?php session_start();if (isset($_SESSION['uname'])) {
+  header("Location:index.php");
+}else{?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,7 +36,7 @@
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form> &nbsp;&nbsp;&nbsp;
         <a href="cart.php">
-          <i class="fa fa-shopping-cart" style="font-size:30px;color: black;"></i><span style="margin-left: -25px;color:white;background: red;border-radius: 50%;padding: 0 6px;margin-top: -25px;">5</span>
+          <i class="fa fa-shopping-cart" style="font-size:30px;color: black;"></i><span style="margin-left: -25px;color:white;background: red;border-radius: 50%;padding: 0 6px;margin-top: -25px;"><?php echo $_SESSION['num']; ?></span>
         </a>
         &nbsp;<a href="customer.php">
           <i class="fa-solid fa-user" style="font-size:30px;color: black;"></i>
@@ -82,7 +85,7 @@
           Login
         </div>
         <div class="card-body" style="background:coral;">
-          <form method="POST" action="admin_log.php">
+          <form method="POST" action="user.php">
             <div class="form-group">
               <label for="name">Name</label>
               <input type="text" class="form-control" id="name" placeholder="Enter your name" name="name" required>
@@ -105,3 +108,4 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body></html>
+<?php }?>
